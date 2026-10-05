@@ -40,8 +40,10 @@ module.exports = (_env, argv = {}) => {
         name: "widgetHost",
         remotes: { userWidget: `userWidget@${remoteOrigin}/remoteEntry.js` },
         shared: {
-          react: { singleton: true, requiredVersion: dependencies.react },
-          "react-dom": { singleton: true, requiredVersion: dependencies["react-dom"] },
+          // The host entry consumes React synchronously, so eager sharing makes
+          // React available in the initial bundle without an async bootstrap.
+          react: { singleton: true, eager: true, requiredVersion: dependencies.react },
+          "react-dom": { singleton: true, eager: true, requiredVersion: dependencies["react-dom"] },
           "@tanstack/react-query": { singleton: true, requiredVersion: dependencies["@tanstack/react-query"] },
           "styled-components": { singleton: true, requiredVersion: dependencies["styled-components"] }
         }
